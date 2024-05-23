@@ -61,13 +61,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        setupEditButton(editButton, book);
+    }
+
+    function setupEditButton(editButton, book) {
         editButton.addEventListener('click', function() {
-            const newTitle = prompt("Edit Judul Buku:", h4.textContent);
-            if (newTitle !== null) h4.textContent = newTitle;
-            const newAuthor = prompt("Edit Pengarang Buku:", pAuthor.textContent);
-            if (newAuthor !== null) pAuthor.textContent = newAuthor;
-            const newYear = prompt("Edit Tahun Terbit:", pYear.textContent);
-            if (newYear !== null) pYear.textContent = newYear;
+            const newTitle = prompt("Masukkan judul buku baru:", book.querySelector('h4').textContent);
+            if (newTitle) {
+                book.querySelector('h4').textContent = newTitle;
+            }
+
+            const newAuthor = prompt("Masukkan nama penulis baru:", book.querySelector('p:nth-child(2)').textContent);
+            if (newAuthor) {
+                book.querySelector('p:nth-child(2)').textContent = newAuthor;
+            }
+
+            const newYear = prompt("Masukkan tahun buku baru:", book.querySelector('p:nth-child(3)').textContent);
+            if (newYear && !isNaN(newYear)) {
+                book.querySelector('p:nth-child(3)').textContent = parseInt(newYear, 10);
+            }
+
+            saveBooks();
         });
     }
 
@@ -77,8 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = book.dataset.id;
             const title = book.querySelector('h4').textContent;
             const author = book.querySelector('p:nth-child(2)').textContent;
-            const year = parseInt(book.querySelector('p:nth-child(3)').textContent, 10); // Konversi year menjadi number
-            const isComplete = book.parentNode.id === 'after'; // Ganti isCompleted dengan isComplete
+            const year = parseInt(book.querySelector('p:nth-child(3)').textContent, 10);
+            const isComplete = book.parentNode.id === 'after';
             books.push({ id, title, author, year, isComplete });
         });
         localStorage.setItem('books', JSON.stringify(books));
