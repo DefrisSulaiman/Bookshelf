@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadBooks() {
         const books = JSON.parse(localStorage.getItem('books')) || [];
         books.forEach(book => {
-            addBookToDOM(book.title, book.author, book.year, book.isCompleted, book.id);
+            addBookToDOM(book.title, book.author, parseInt(book.year, 10), book.isComplete, book.id);
         });
     }
 
-    function addBookToDOM(title, author, year, isCompleted, id = +new Date()) {
+    function addBookToDOM(title, author, year, isComplete, id = +new Date()) {
         const book = document.createElement('div');
         book.className = 'book';
         book.dataset.id = id;
@@ -37,20 +37,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const backButton = document.createElement('button');
         backButton.className = 'back';
-        backButton.innerHTML = isCompleted ? 'Belum<br>Dibaca' : 'Sudah<br>Dibaca';
+        backButton.innerHTML = isComplete ? 'Belum<br>Dibaca' : 'Sudah<br>Dibaca';
         btn.appendChild(backButton);
 
         book.appendChild(text);
         book.appendChild(btn);
 
-        const targetList = isCompleted ? document.getElementById('after') : document.getElementById('before');
+        const targetList = isComplete ? document.getElementById('after') : document.getElementById('before');
         targetList.appendChild(book);
 
         backButton.addEventListener('click', function() {
-            isCompleted = !isCompleted;
-            const newTargetList = isCompleted ? document.getElementById('after') : document.getElementById('before');
+            isComplete = !isComplete;
+            const newTargetList = isComplete ? document.getElementById('after') : document.getElementById('before');
             newTargetList.appendChild(book);
-            backButton.innerHTML = isCompleted ? 'Belum<br>Dibaca' : 'Sudah<br>Dibaca';
+            backButton.innerHTML = isComplete ? 'Belum<br>Dibaca' : 'Sudah<br>Dibaca';
             saveBooks();
         });
 
@@ -77,9 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = book.dataset.id;
             const title = book.querySelector('h4').textContent;
             const author = book.querySelector('p:nth-child(2)').textContent;
-            const year = book.querySelector('p:nth-child(3)').textContent;
-            const isCompleted = book.parentNode.id === 'after';
-            books.push({ id, title, author, year, isCompleted });
+            const year = parseInt(book.querySelector('p:nth-child(3)').textContent, 10); // Konversi year menjadi number
+            const isComplete = book.parentNode.id === 'after'; // Ganti isCompleted dengan isComplete
+            books.push({ id, title, author, year, isComplete });
         });
         localStorage.setItem('books', JSON.stringify(books));
     }
@@ -89,9 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const title = document.getElementById('input-book').value;
         const author = document.getElementById('input-author').value;
         const year = document.getElementById('input-year').value;
-        const isCompleted = checkbox.checked;
+        const isComplete = checkbox.checked;
 
-        addBookToDOM(title, author, year, isCompleted);
+        addBookToDOM(title, author, year, isComplete);
         saveBooks(); 
     });
 
