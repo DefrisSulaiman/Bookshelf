@@ -15,7 +15,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('assets/sunset.gif');
+    background-image: url('assets/sunset.png');
     background-size: cover;
 }
 .output {
