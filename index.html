@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="assets/book.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <title>Bookshelf App</title>
+</head>
+<body>
+    <main>
+        <div class="output">
+            <div class="before">
+                <h3>Buku yang belum dibaca</h3>
+                <div class="list"></div>
+            </div>
+            <hr>
+            <div class="after">
+                <h3>Buku yang sudah dibaca</h3>
+                <div class="list"></div>
+            </div>
+        </div>
+        <div class="input">
+            <div class="nav">
+                <div class="logo"><img src="assets/bookshelf.png" alt="logo bookshelf"></div>
+                <div class="search">
+                    <input type="search" placeholder="Search...">
+                </div>
+            </div>
+            <div class="core">
+                <div class="input-book">
+                    <h3>Masukkan Bukumu!</h3>
+                    <div class="book form">
+                        <label for="input-book">Buku</label>
+                        <input type="text" id="input-book" placeholder="Masukkan judul buku">
+                    </div>
+                    <div class="author form">
+                        <label for="input-author">Pengarang</label>
+                        <input type="text" id="input-author" placeholder="Masukkan nama pengarang">
+                    </div>
+                    <div class="year form">
+                        <label for="input-year">Tahun</label>
+                        <input type="number" id="input-year" placeholder="Masukkan tahun terbit">
+                    </div>
+                    <div class="read form">
+                        <label for="input-publisher">Selesai Dibaca</label>
+                        <input type="checkbox" id="input-publisher" placeholder="">
+                    </div>
+                    <button class="form">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+

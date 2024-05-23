@@ -1,0 +1,11 @@
+<div class="book">
+    <div class="text">
+        <h4>Judul Buku</h4>
+        <p>Pengarang</p>
+        <p>Tahun</p>
+    </div>
+    <div class="btn">
+        <button id="edit"><i class="fa fa-pencil"></i></button>
+        <button id="delete"><i class="fa fa-trash"></i></button>
+    </div>
+</div>
