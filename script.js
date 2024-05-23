@@ -1,19 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
     const saveButton = document.querySelector('.input .core .input-book button.form');
-    const checkbox = document.getElementById('input-publisher'); // Asumsi ID checkbox adalah 'input-publisher'
+    const checkbox = document.getElementById('input-publisher');
 
-    // Fungsi untuk memuat buku dari localStorage
     function loadBooks() {
         const books = JSON.parse(localStorage.getItem('books')) || [];
         books.forEach(book => {
-            addBookToDOM(book.title, book.author, book.year, book.isRead);
+            addBookToDOM(book.title, book.author, book.year, book.isCompleted, book.id);
         });
     }
 
-    // Fungsi untuk menambahkan buku ke DOM
-    function addBookToDOM(title, author, year, isRead) {
+    function addBookToDOM(title, author, year, isCompleted, id = +new Date()) {
         const book = document.createElement('div');
         book.className = 'book';
+        book.dataset.id = id;
 
         const text = document.createElement('div');
         text.className = 'text';
@@ -36,16 +35,25 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.appendChild(editButton);
         btn.appendChild(deleteButton);
 
+        const backButton = document.createElement('button');
+        backButton.className = 'back';
+        backButton.innerHTML = isCompleted ? 'Belum<br>Dibaca' : 'Sudah<br>Dibaca';
+        btn.appendChild(backButton);
+
         book.appendChild(text);
         book.appendChild(btn);
 
-        // Gunakan ID 'before' dan 'after' untuk menargetkan list yang benar
-        const targetList = isRead ? document.getElementById('after') : document.getElementById('before');
+        const targetList = isCompleted ? document.getElementById('after') : document.getElementById('before');
         targetList.appendChild(book);
 
-        checkbox.checked = isRead;
+        backButton.addEventListener('click', function() {
+            isCompleted = !isCompleted;
+            const newTargetList = isCompleted ? document.getElementById('after') : document.getElementById('before');
+            newTargetList.appendChild(book);
+            backButton.innerHTML = isCompleted ? 'Belum<br>Dibaca' : 'Sudah<br>Dibaca';
+            saveBooks();
+        });
 
-        // Event listener untuk delete
         deleteButton.addEventListener('click', function() {
             if (confirm("Apakah Anda yakin ingin menghapus buku ini?")) {
                 book.remove();
@@ -53,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Event listener untuk edit
         editButton.addEventListener('click', function() {
             const newTitle = prompt("Edit Judul Buku:", h4.textContent);
             if (newTitle !== null) h4.textContent = newTitle;
@@ -64,15 +71,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Fungsi untuk menyimpan semua buku ke localStorage
     function saveBooks() {
         const books = [];
         document.querySelectorAll('.output .book').forEach(book => {
+            const id = book.dataset.id;
             const title = book.querySelector('h4').textContent;
             const author = book.querySelector('p:nth-child(2)').textContent;
             const year = book.querySelector('p:nth-child(3)').textContent;
-            const isRead = book.parentNode.id === 'after'; // Periksa apakah parent ID adalah 'after'
-            books.push({ title, author, year, isRead });
+            const isCompleted = book.parentNode.id === 'after';
+            books.push({ id, title, author, year, isCompleted });
         });
         localStorage.setItem('books', JSON.stringify(books));
     }
@@ -82,26 +89,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const title = document.getElementById('input-book').value;
         const author = document.getElementById('input-author').value;
         const year = document.getElementById('input-year').value;
-        const isRead = checkbox.checked;
+        const isCompleted = checkbox.checked;
 
-        addBookToDOM(title, author, year, isRead);
-        saveBooks(); // Update localStorage after adding a new book
+        addBookToDOM(title, author, year, isCompleted);
+        saveBooks(); 
     });
 
-    loadBooks(); // Load books when the page is loaded
+    loadBooks();
     const searchInput = document.querySelector('.nav .search input[type="search"]');
 
-    // Fungsi search engine
     searchInput.addEventListener('input', function() {
         const searchText = searchInput.value.toLowerCase();
         const books = document.querySelectorAll('.output .book');
-        console.log(`Jumlah buku: ${books.length}`); // Debug jumlah buku
+        console.log(`Jumlah buku: ${books.length}`);
 
         books.forEach(book => {
             const title = book.querySelector('h4').textContent.toLowerCase();
-            const author = book.querySelector('p:nth-child(2)').textContent.toLowerCase(); // Mengambil pengarang
-            const year = book.querySelector('p:nth-child(3)').textContent.toLowerCase(); // Mengambil tahun
-            console.log(`Judul: ${title}, Pengarang: ${author}, Tahun: ${year}`); // Debug judul, pengarang, dan tahun
+            const author = book.querySelector('p:nth-child(2)').textContent.toLowerCase();
+            const year = book.querySelector('p:nth-child(3)').textContent.toLowerCase();
+            console.log(`Judul: ${title}, Pengarang: ${author}, Tahun: ${year}`);
 
             if (title.includes(searchText) || author.includes(searchText) || year.includes(searchText)) {
                 book.style.display = '';
